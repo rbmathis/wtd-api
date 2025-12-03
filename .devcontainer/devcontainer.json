@@ -1,0 +1,68 @@
+{
+  "name": "WillTheyDie API",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+  
+  "features": {
+    "ghcr.io/devcontainers/features/azure-cli:1": {},
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-dotnettools.csdevkit",
+        "ms-dotnettools.csharp",
+        "ms-dotnettools.vscode-dotnet-runtime",
+        "ms-azuretools.vscode-docker",
+        "GitHub.copilot",
+        "GitHub.copilot-chat",
+        "eamodio.gitlens",
+        "humao.rest-client",
+        "pflannery.vscode-versionlens",
+        "ms-vscode.powershell",
+        "ckolkman.vscode-postgres",
+        "streetsidesoftware.code-spell-checker"
+      ],
+      "settings": {
+        "dotnet.defaultSolution": "WillTheyDie.sln",
+        "omnisharp.enableRoslynAnalyzers": true,
+        "omnisharp.enableEditorConfigSupport": true,
+        "omnisharp.enableImportCompletion": true,
+        "omnisharp.organizeImportsOnFormat": true,
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+          "source.organizeImports": "explicit"
+        },
+        "files.exclude": {
+          "**/bin": true,
+          "**/obj": true
+        }
+      }
+    }
+  },
+
+  "forwardPorts": [5000, 5001, 5432, 6379],
+  "portsAttributes": {
+    "5000": {
+      "label": "API (HTTP)",
+      "onAutoForward": "notify"
+    },
+    "5001": {
+      "label": "API (HTTPS)",
+      "onAutoForward": "notify"
+    },
+    "5432": {
+      "label": "PostgreSQL"
+    },
+    "6379": {
+      "label": "Redis"
+    }
+  },
+
+  "postCreateCommand": "dotnet restore && dotnet tool restore",
+  "postStartCommand": "dotnet ef database update --no-build || echo 'Migration skipped - will run on first app start'",
+
+  "remoteUser": "vscode"
+}
